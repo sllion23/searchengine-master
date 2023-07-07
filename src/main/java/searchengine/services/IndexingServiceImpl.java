@@ -6,6 +6,7 @@ import searchengine.config.Site;
 import searchengine.config.SitesList;
 import searchengine.dto.indexing.IndexingResponse;
 import searchengine.repositories.*;
+import searchengine.utils.ThreadIndex;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package searchengine.services;
+package searchengine.utils;
 
 import java.util.*;
 import java.util.stream.Collectors;

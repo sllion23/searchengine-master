@@ -1,4 +1,4 @@
-package searchengine.services;
+package searchengine.utils;
 
 import searchengine.config.JsoupConfig;
 import searchengine.model.PageEntity;

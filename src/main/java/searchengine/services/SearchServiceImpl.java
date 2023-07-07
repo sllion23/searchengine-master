@@ -11,6 +11,9 @@ import searchengine.dto.search.SearchResponse;
 import searchengine.model.PageEntity;
 import searchengine.model.Status;
 import searchengine.repositories.*;
+import searchengine.utils.LemmaFinder;
+import searchengine.utils.SearchInSite;
+import searchengine.utils.SnippetHtml;
 
 import java.io.IOException;
 import java.util.*;

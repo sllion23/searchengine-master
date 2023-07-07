@@ -1,4 +1,4 @@
-package searchengine.services;
+package searchengine.utils;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -11,6 +11,7 @@ import searchengine.model.PageEntity;
 import searchengine.model.SiteEntity;
 import searchengine.repositories.DBRepository;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +24,7 @@ public class IndexingOneSite extends RecursiveTask {
     private final JsoupConfig jsoupConfig;
     private final List<String> hrefList;
     private final List<IndexingOneSite> taskList = new ArrayList<>();
-    private LemmaFinder lemmaFinder;
+
 
 
     public IndexingOneSite(SiteEntity siteEntity, String link, DBRepository dbRepository, JsoupConfig jsoupConfig) {
@@ -68,9 +69,6 @@ public class IndexingOneSite extends RecursiveTask {
                 currentPageEntity.setContent(doc.html());
                 dbRepository.getPageRepository().save(currentPageEntity);
                 if (statusCode < 400) {
-                    if (lemmaFinder == null) {
-                        lemmaFinder = LemmaFinder.getInstance();
-                    }
                     saveLemmaAndIndex(currentPageEntity, doc.html());
                 }
             }
@@ -98,8 +96,8 @@ public class IndexingOneSite extends RecursiveTask {
         return doc;
     }
 
-    private void saveLemmaAndIndex(PageEntity pageEntity, String html) {
-        Map<String, Integer> lemmasMap = lemmaFinder.collectLemmas(html);
+    private synchronized void saveLemmaAndIndex(PageEntity pageEntity, String html) throws IOException {
+        Map<String, Integer> lemmasMap = LemmaFinder.getInstance().collectLemmas(html);
 
         for (Map.Entry<String, Integer> lemma : lemmasMap.entrySet()) {
             LemmaEntity lemmaEntity = dbRepository.getLemmaRepository().findLemmaBySiteIdAndLemma(siteEntity.getId(), lemma.getKey());
